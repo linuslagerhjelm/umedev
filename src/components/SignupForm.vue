@@ -4,25 +4,38 @@
       <img alt="Vue logo" src="../assets/logo.png">
     </div>
     <form @submit.prevent="handleSubmit">
-      <md-field>
+      
+      <md-field :class="{'md-input-invalid': errors.has('name')}">
         <label>Name</label>
-        <md-input v-model="name"></md-input>
+        <md-input v-model="name" v-validate name="name" data-vv-rules="required"></md-input>
       </md-field>
-      <md-field>
+      <span class="md-error">{{errors.first('name')}}</span>
+
+      <md-field :class="{'md-input-invalid': errors.has('email')}">
         <label>Epost</label>
-        <md-input v-model="email"></md-input>
+        <md-input v-model="email" v-validate name="email" data-vv-rules="required|email"></md-input>
       </md-field>
-      <md-field>
+      <span class="md-error">{{errors.first('email')}}</span>
+      
+      <md-field :class="{'md-input-invalid': errors.has('company')}">
         <label>Företag</label>
-        <md-input v-model="company"></md-input>
+        <md-input v-model="company" v-validate name="company" data-vv-rules="required"></md-input>
       </md-field>
+      <span class="md-error">{{errors.first('company')}}</span>
+      
       <md-field>
         <label>Specialkost</label>
         <md-input v-model="specialDiet"></md-input>
       </md-field>
+      
       <transition name="fade">
-        <div class="success" v-if="ok">Anmälan lyckades!</div>
+        <div class="submit-message success" v-if="ok">Anmälan lyckades!</div>
       </transition>
+
+      <transition name="fade">
+        <div class="submit-message error" v-if="submitError">{{submitError}}</div>
+      </transition>
+      
       <div class="center">
         <md-button class="md-raised md-primary" type="submit">Anmäl</md-button>
       </div>
@@ -32,6 +45,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import VeeValidate from 'vee-validate';
 import VueMaterial from 'vue-material'
 import 'vue-material/dist/vue-material.min.css'
 
@@ -42,7 +56,7 @@ export default Vue.extend({
   data: () => ({
     validate: false,
     ok: false,
-    error: '',
+    submitError: '',
     name: '',
     email: '',
     company: '',
@@ -50,6 +64,10 @@ export default Vue.extend({
   }),
   methods: {
     handleSubmit() {
+      if (this.errors.any()) {
+        this.submitError = "Formuläret innehåller fel. Vänligen rätta till dessa och försök igen"
+        return
+      }
       const {
         name,
         email,
@@ -63,15 +81,16 @@ export default Vue.extend({
         specialDiet,
       })
       .then(() => this.ok = true)
-      .catch(err => this.error = err)
+      .catch(err => this.submitError = err)
     }
   }
 })
 
 Vue.use(VueMaterial)
+Vue.use(VeeValidate)
 </script>
 
-<style lang="postcss" scoped>
+<style scoped>
 .signupform {
   justify-self: center;
   grid-column-start: 2;
@@ -96,13 +115,28 @@ Vue.use(VueMaterial)
   margin: auto;
 }
 
-.success {
+.submit-message {
   width: 100%;
   padding: 15px;
   text-align: center;
+}
+
+.success {
   background-color: #47c93747;
   border: 1px solid green;
   color: green;
+}
+
+.error {
+  background-color: #FF000047;
+  border: 1px solid #9a0000;
+  color: #9a0000;
+}
+
+.md-error {
+  margin-top: -20px;
+  display: block;
+  color: red;
 }
 
 .fade-enter-active, .fade-leave-active {
