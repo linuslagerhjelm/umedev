@@ -1,40 +1,51 @@
 <template>
   <div id="app">
-    <div id="logo" >
-      <img alt="Vue logo" src="./assets/logo.png">
+    <div class="main">
+      <OverviewText />
+      <SignupForm />
     </div>
-    <SignupForm />
   </div>
 </template>
 
 <script>
 import SignupForm from './components/SignupForm.vue'
+import OverviewText from './components/OverviewText.vue'
 
 export default {
   name: 'app',
   components: {
-    SignupForm
+    SignupForm,
+    OverviewText
   }
 }
 </script>
 
 <style>
+html, body, #app {
+  height: 100%;
+  width: 100%;
+}
+
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  display: flex;
+
+  background: url('assets/bg-large.jpg') no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
 }
 
-#logo {
-  width: 100px;
-  height: 100px;
-}
-
-#logo img {
-  max-width: 100%;
-  max-height: 100%;
+.main {
+  display: inline-grid;
+  grid-template-columns: 50% 50%;
+  background-color: white;
+  width: 100%;
+  margin: auto;
+  max-width: 1240px;
 }
 </style>
