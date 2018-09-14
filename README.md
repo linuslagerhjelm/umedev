@@ -19,3 +19,9 @@ yarn run build
 ```
 yarn run lint
 ```
+### Firebase
+Add firebase configuration info in `src/db.js`.  
+Remember to tell git to not track your credentials:
+```
+git update-index --assume-unchanged src/db.js
+```
