@@ -65,8 +65,10 @@ export default Vue.extend({
   methods: {
     handleSubmit() {
       if (this.errors.any()) {
-        this.submitError = "Formuläret innehåller fel. Vänligen rätta till dessa och försök igen"
+        this.submitError = 'Formuläret innehåller fel. Vänligen rätta till dessa och försök igen'
         return
+      } else {
+        this.submitError = ''
       }
       const {
         name,
